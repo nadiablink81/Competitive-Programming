@@ -1,0 +1,63 @@
+import java.io.*;
+import java.util.*;
+
+class ariprog {
+  public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("ariprog.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("ariprog.out")));
+
+    int N = Integer.parseInt(f.readLine());
+    int M = Integer.parseInt(f.readLine());
+    HashSet<Integer> set = new HashSet<>();
+    int max = 2*M*M;
+    for (int i = 0; i <= M; i++) {
+        for (int j = 0; j <= M; j++) {
+            int x = (i*i) + (j*j);
+            set.add(x);
+        }
+    }
+    // System.out.println(set);
+    // System.out.println(max);
+    // System.out.println();
+
+    HashMap<Integer, ArrayList<Integer>> map = new HashMap<>();
+    ArrayList<Integer> list = new ArrayList<>();
+
+    ArrayList<Integer> nums = new ArrayList<>();
+    nums.addAll(set);
+    Collections.sort(nums);
+    // System.out.println(nums);
+
+    outer: for (int i = 0; i < nums.size(); i++) {
+        inner: for (int j = i+1; j < nums.size(); j++) {
+            int b = nums.get(j) - nums.get(i);
+            if (nums.get(i) + (N-1) * b > max) continue outer;
+            for (int k = 0; k < N; k++) {
+                int x = nums.get(i) + b*k;
+                if (!set.contains(x)) continue inner;
+            }
+            if (map.get(b) == null) {
+                map.put(b, new ArrayList<>());
+                list.add(b);
+            }
+            map.get(b).add(nums.get(i));
+        }
+    }
+  
+    Collections.sort(list);
+    // System.out.println(map);
+    for (int i = 0; i < list.size(); i++) {
+        Collections.sort(map.get(list.get(i)));
+        for (int v : map.get(list.get(i))) {
+            System.out.println(v + " " + list.get(i));
+            out.println(v + " " + list.get(i));
+        }
+    }
+    if (list.size() == 0) {
+        System.out.println("NONE");
+        out.println("NONE");
+    }
+
+    out.close();
+  }
+}
