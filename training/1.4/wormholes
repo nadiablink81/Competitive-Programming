@@ -1,0 +1,93 @@
+import java.io.*;
+import java.util.*;
+
+class wormhole {
+
+    static int N;
+    static int[] x;
+    static int[] y;
+    static int[] next;
+    static int[] pair;
+    static int cnt;
+
+    public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("wormhole.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("wormhole.out")));
+
+    N = Integer.parseInt(f.readLine());
+    x = new int[N];
+    y = new int[N];
+    for (int i = 0; i < N; i++) {
+        StringTokenizer st = new StringTokenizer(f.readLine());
+        x[i] = Integer.parseInt(st.nextToken());
+        y[i] = Integer.parseInt(st.nextToken());
+    }
+    // System.out.println(Arrays.toString(x));
+    // System.out.println(Arrays.toString(y));
+    // System.out.println();
+
+    next = new int[N];
+    Arrays.fill(next, -1);
+    for (int i = 0; i < N; i++) {
+        int minx = Integer.MAX_VALUE;
+        for (int j = 0; j < N; j++) {
+            if (i != j && y[i] == y[j] && x[j] > x[i]) {
+                if (x[j] < minx) {
+                    next[i] = j;
+                    minx = x[j];
+                }
+            }
+        }
+    }
+    // System.out.println(Arrays.toString(next));
+    // System.out.println();
+    pair = new int[N];
+    Arrays.fill(pair, -1);
+    cnt = 0;
+    dfs(0);
+    System.out.println(cnt);
+    out.println(cnt);
+
+    out.close();
+  }
+
+  static void dfs(int x) {
+      if (x == N) {
+        if (test()) cnt++;
+        // System.out.println(Arrays.toString(pair));
+        // System.out.println(test());
+        // System.out.println();
+        return;
+      }
+      if (pair[x] != -1) {
+          dfs(x+1);
+      } else {
+          for (int i = 0; i < N; i++) {
+              if (i != x && pair[i] == -1) {
+                  pair[x] = i;
+                  pair[i] = x;
+                  dfs(x+1);
+                  pair[x] = -1;
+                  pair[i] = -1;
+              }
+          }
+      }
+  }
+
+  static boolean test() {
+      HashSet<Integer> visited = new HashSet<>();
+      outer: for (int i = 0; i < N; i++) {
+          int pos = i;
+          visited.clear();
+          while (!visited.contains(pos)) {
+              visited.add(pos);
+              if (next[pos] == -1) continue outer;
+              pos = pair[next[pos]];
+            //   System.out.println(pos + " " + visited);
+          }
+          return true;
+      }
+      return false;
+  }
+
+}
