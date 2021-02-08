@@ -1,0 +1,55 @@
+import java.io.*;
+import java.util.*;
+
+class sprime {
+
+    static int N;
+    static HashSet<String> set;
+
+  public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("sprime.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("sprime.out")));
+
+    N = Integer.parseInt(f.readLine());
+    set = new HashSet<>();
+    
+    test("2");
+    test("3");
+    test("5");
+    test("7");
+
+    // System.out.println(set);
+    ArrayList<Integer> list = new ArrayList<>();
+    for (String v : set) list.add(Integer.parseInt(v));
+    Collections.sort(list);
+    for (int v : list) {
+        System.out.println(v);
+        out.println(v);
+    }
+    
+    out.close();
+  }
+
+  static void test(String s) {
+      if (!prime(s)) return;
+      if (s.length() == N) {
+          set.add(s);
+          return;
+      }
+      for (int i = 1; i <= 9; i+= 2) {
+          String x = s + "" + i;
+          test(x);
+      }
+  }
+
+  static boolean prime(String s) {
+      int x = Integer.parseInt(s);
+      if (x == 2) return true;
+      if (x % 2 == 0) return false;
+      for (int i = 3; i <= Math.pow(x, .5); i+=2) {
+          if (x % i == 0) return false;
+      }
+      return true;
+  }
+
+}
