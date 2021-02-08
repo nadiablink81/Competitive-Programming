@@ -1,0 +1,60 @@
+import java.io.*;
+import java.util.*;
+
+class pprime {
+
+    static int a, b;
+    static int maxlength;
+    static HashSet<String> set;
+
+  public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("pprime.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("pprime.out")));
+
+    StringTokenizer st = new StringTokenizer(f.readLine());
+    a = Integer.parseInt(st.nextToken());
+    b = Integer.parseInt(st.nextToken());
+    
+    maxlength = (b + "").length();
+
+    set = new HashSet<>();
+    for (int i = 0; i <= 9; i++) {
+        String s = "" + i;
+        pal(s);
+    }
+    for (int i = 0; i <= 9; i++) {
+        String s = i + "" + i;
+        pal(s);
+    }
+    // System.out.println(set);
+
+    ArrayList<Integer> list = new ArrayList<>();
+    for (String v : set) list.add(Integer.parseInt(v));
+    Collections.sort(list);
+    for (int v : list) {
+        if (v >= a && v <= b && prime(v)) {
+            System.out.println(v);
+            out.println(v);
+        }
+    }
+    out.close();
+  }
+
+  static void pal(String s) {
+      if (Long.parseLong(s) > b || s.length() > maxlength) return;
+      if (s.charAt(0) != '0') set.add(s);
+      for (int i = 0; i <= 9; i++) {
+          String x = i + "" + s + "" + i;
+          pal(x);
+      }
+  }
+
+  static boolean prime(int x) {
+      if (x % 2 == 0) return false;
+      for (int i = 3; i <= Math.pow(x, .5); i+=2) {
+          if (x % i == 0) return false;
+      }
+      return true;
+  }
+
+}
