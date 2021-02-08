@@ -1,0 +1,130 @@
+import java.io.*;
+import java.util.*;
+
+class castle {
+
+    static int M, N;
+    static int[][] ar;
+
+    static boolean[][] north;
+    static boolean[][] south;
+    static boolean[][] west;
+    static boolean[][] east;
+
+    static boolean[][] visited;
+    static int maxrooms;
+
+  public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("castle.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("castle.out")));
+
+    StringTokenizer st = new StringTokenizer(f.readLine());
+    M = Integer.parseInt(st.nextToken());
+    N = Integer.parseInt(st.nextToken());
+    ar = new int[N][M];
+    north = new boolean[N][M];
+    south = new boolean[N][M];
+    west = new boolean[N][M];
+    east = new boolean[N][M];
+
+    for (int i = 0; i < N; i++) {
+        st = new StringTokenizer(f.readLine());
+        for (int j = 0; j < M; j++) {
+            int x = Integer.parseInt(st.nextToken());
+            if (x >= 8) {
+                south[i][j] = true;
+                x-= 8;
+            }
+            if (x >= 4) {
+                east[i][j] = true;
+                x-= 4;
+            }
+            if (x >= 2) {
+                north[i][j] = true;
+                x-= 2;
+            }
+            if (x >= 1) {
+                west[i][j] = true;
+                x-= 1;
+            }
+        }
+    }
+
+    //---------------------------------
+    
+    visited = new boolean[N][M];
+    int ans1 = 0;
+    int ans2 = 0;
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            if (!visited[i][j]) {
+                maxrooms = 0;
+                ff(i, j);
+                ans1++;
+                ans2 = Math.max(maxrooms, ans2);
+            }
+        }
+    }
+    System.out.println(ans1);
+    out.println(ans1);
+    System.out.println(ans2);
+    out.println(ans2);
+
+    //---------------------------------
+    
+    int a = 0;
+    int b = 0;
+    String dir = "";
+    int ans3 = 0;
+
+    for (int j = 0; j < M; j++) {
+        for (int i = N-1; i >= 0; i--) {
+            if (north[i][j]) {
+                maxrooms = 0;
+                visited = new boolean[N][M];
+                north[i][j] = false;
+                ff(i, j);
+                north[i][j] = true;
+                if (maxrooms > ans3) {
+                    ans3 = maxrooms;
+                    a = i+1;
+                    b = j+1;
+                    dir = "N";
+                }
+            }
+            if (east[i][j]) {
+                maxrooms = 0;
+                visited = new boolean[N][M];
+                east[i][j] = false;
+                ff(i, j);
+                east[i][j] = true;
+                if (maxrooms > ans3) {
+                    ans3 = maxrooms;
+                    a = i+1;
+                    b = j+1;
+                    dir = "E";
+                }
+            }
+        }
+    }
+
+    System.out.println(ans3);
+    out.println(ans3);
+    System.out.println(a + " " + b + " " + dir);
+    out.println(a + " " + b + " " + dir);
+
+    out.close();
+  }
+
+  static void ff (int i, int j) {
+      if (i < 0 || i == N || j < 0 || j == M) return;
+      if (visited[i][j]) return;
+      visited[i][j] = true;
+      maxrooms++;
+      if (!north[i][j]) ff(i-1, j);
+      if (!south[i][j]) ff(i+1, j);
+      if (!west[i][j]) ff(i, j-1);
+      if (!east[i][j]) ff(i, j+1);
+  }
+
+}
