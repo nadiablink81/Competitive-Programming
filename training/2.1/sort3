@@ -1,0 +1,57 @@
+import java.io.*;
+import java.util.*;
+
+class sort3 {
+
+  public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("sort3.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("sort3.out")));
+
+    int N = Integer.parseInt(f.readLine());
+    int[] ar = new int[N];
+    int[] sort = new int[N];
+    for (int i = 0; i < N; i++) {
+        ar[i] = Integer.parseInt(f.readLine());
+        sort[i] = ar[i];
+    }
+    Arrays.sort(sort);
+    // System.out.println(Arrays.toString(sort));
+    // System.out.println(Arrays.toString(ar));
+    // System.out.println();
+
+    //If swap, then satisfies both 
+    int cnt = 0;
+    outer: for (int i = 0; i < N; i++) {
+        for (int j = i+1; j < N; j++) {
+            if (ar[i] == sort[j] && ar[j] == sort[i] && ar[i] != ar[j]) {
+                cnt++;
+                int temp = ar[j];
+                ar[j] = ar[i];
+                ar[i] = temp;
+                continue outer;
+            }
+        }
+    }
+    
+    //If swap, statifies one
+    outer: for (int i = 0; i < N; i++) {
+        if (ar[i] == sort[i]) continue;
+        for (int j = N-1; j >= i+1; j--) {
+            if (ar[j] == sort[i]) {
+                int temp = ar[j];
+                ar[j] = ar[i];
+                ar[i] = temp;
+                cnt++;
+                continue outer;
+            }
+        }
+    }
+    // System.out.println(Arrays.toString(ar));
+    
+    System.out.println(cnt);
+    out.println(cnt);
+
+    out.close();
+  }
+
+}
