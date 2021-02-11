@@ -1,0 +1,90 @@
+import java.io.*;
+import java.util.*;
+
+class holstein {
+
+    static int V, G;
+    static int[] ar;
+    static int[][] feed;
+    static ArrayList<Integer> list;
+
+    static boolean stop;
+
+  public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("holstein.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("holstein.out")));
+
+    V = Integer.parseInt(f.readLine());
+    StringTokenizer st = new StringTokenizer(f.readLine());
+    ar = new int[V];
+    for (int i = 0; i < V; i++) ar[i] = Integer.parseInt(st.nextToken());
+    G = Integer.parseInt(f.readLine());
+    feed = new int[G][V];
+    for (int i = 0; i < G; i++) {
+        st = new StringTokenizer(f.readLine());
+        for (int j = 0; j < V; j++) {
+            feed[i][j] = Integer.parseInt(st.nextToken());
+        }
+    }
+
+    // System.out.println(Arrays.toString(ar));
+    // System.out.println();
+    // for (int[] v : feed) System.out.println(Arrays.toString(v));
+    // System.out.println();
+
+    stop = false;
+    for (int i = 1; i <= G; i++) {
+        list = new ArrayList<>();
+        comb(0, i);
+        if (stop) break;
+    }
+    // System.out.println(list);
+
+    System.out.print(list.size());
+    out.print(list.size());
+    for (int i = 0; i < list.size(); i++) {
+        System.out.print(" " + (list.get(i)+1));
+        out.print(" " + (list.get(i)+1));
+    }
+    System.out.println();
+    out.println();
+
+    out.close();
+  }
+
+  static void comb(int pos, int x) {
+      if (stop) return;
+      if (pos > G) return;
+      if (list.size() == x) {
+        //   System.out.println(list);
+          test();
+          return;
+      }
+      ArrayList<Integer> temp = new ArrayList<>();
+      temp.addAll(list);
+      list.add(pos);
+      comb(pos+1, x);
+      if (stop) return;
+      list.clear();
+      list.addAll(temp);
+      comb(pos+1, x);
+  }
+
+  static void test() {
+      int[] num = new int[V];
+      for (int i = 0; i < list.size(); i++) {
+          for (int j = 0; j < V; j++) {
+              num[j] += feed[list.get(i)][j];
+          }
+      }
+    //   System.out.println(list);
+    //   System.out.println(Arrays.toString(num));
+    //   System.out.println();
+
+      for (int i = 0; i < V; i++) {
+          if (num[i] < ar[i]) return;
+      }
+      stop = true;
+  }
+
+}
