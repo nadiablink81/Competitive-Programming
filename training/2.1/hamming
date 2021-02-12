@@ -1,0 +1,71 @@
+import java.io.*;
+import java.util.*;
+
+class hamming {
+
+    static int N, B, D;
+    static HashSet<String> set;
+    static ArrayList<Integer> ans;
+
+  public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("hamming.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("hamming.out")));
+
+    StringTokenizer st = new StringTokenizer(f.readLine());
+    N = Integer.parseInt(st.nextToken());
+    B = Integer.parseInt(st.nextToken());
+    D = Integer.parseInt(st.nextToken());
+
+    set = new HashSet<>();
+    ans = new ArrayList<>();
+
+    int x = 0;
+    while (set.size() < N) {
+        test(x);
+        x++;
+    }
+
+    // System.out.println(set);
+    // System.out.println(ans);
+
+    for (int i = 0; i < ans.size(); i++) {
+        if (i % 10 == 0) {
+            if (i != 0) {
+                System.out.println();
+                out.println();
+            }
+            System.out.print(ans.get(i));
+            out.print(ans.get(i));
+        } else {
+            System.out.print(" " + ans.get(i));
+            out.print(" " + ans.get(i));
+        }
+    }
+    System.out.println();
+    out.println();
+    out.close();
+  }
+
+  static void test(int x) {
+      String s = Integer.toBinaryString(x);
+      while (s.length() < B) {
+          s = "0" + s;
+      }
+
+      outer: for (String v : set) {
+          int cnt = 0;
+          for (int i = 0; i < B; i++) {
+              if (s.charAt(i) != v.charAt(i)) {
+                  cnt++;
+                  if (cnt >= D) continue outer;
+              }
+          }
+          return;
+      }
+    //   System.out.println(s);
+      ans.add(x);
+      set.add(s);
+      return;
+  }
+
+}
