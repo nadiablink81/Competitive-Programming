@@ -1,0 +1,120 @@
+import java.io.*;
+import java.util.*;
+
+class lamps {
+  
+  static int N, C;
+  static int[][] comb;
+  static int index;
+
+  public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("lamps.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("lamps.out")));
+
+    N = Integer.parseInt(f.readLine());
+    C = Integer.parseInt(f.readLine());
+    comb = new int[16][N];
+    index = 0;
+    pos(0, new int[N]);
+    // for (int[] v : comb) System.out.println(Arrays.toString(v));
+    
+    HashSet<Integer> invalid = new HashSet<>();
+    StringTokenizer st = new StringTokenizer(f.readLine());
+    while (true) {
+      int x = Integer.parseInt(st.nextToken())-1;
+      if (x == -2) break;
+      for (int i = 0; i < 16; i++) {
+        if (comb[i][x] == 0) invalid.add(i);
+      }
+    }
+    st = new StringTokenizer(f.readLine());
+    boolean no = true;
+    while (true) {
+      int x = Integer.parseInt(st.nextToken())-1;
+      if (x == -2) break;
+      for (int i = 0; i < 16; i++) {
+        if (comb[i][x] == 1) invalid.add(i);
+      }
+      no = false;
+    }
+    if (C == 0) {
+        if (no) {
+          String s = "";
+          for (int v : comb[15]) s+= "" + v;
+          System.out.println(s);
+          out.println(s);
+        } else {
+            System.out.println("IMPOSSIBLE");
+            out.println("IMPOSSIBLE");
+        }
+        out.close();
+    }
+    // System.out.println(invalid);
+    // System.out.println();
+    ArrayList<String> ans = new ArrayList<>();
+    for (int i = 0; i < 16; i++) {
+        if (invalid.contains(i)) continue;
+        int zerocnt = 0;
+        int onecnt = 0;
+        for (int j = 0; j < 4; j++) {
+          if (comb[i][j] == 0) zerocnt++;
+          else onecnt++;
+        }
+        if (zerocnt+2 == onecnt || onecnt+2 == zerocnt) continue;
+        String s = "";
+        for (int v : comb[i]) s += "" + v;
+        ans.add(s);
+    }
+    if (ans.size() == 0) {
+        System.out.println("IMPOSSIBLE");
+        out.println("IMPOSSIBLE");
+    }
+    Collections.sort(ans);
+    // System.out.println(ans);
+    for (String v : ans) {
+        System.out.println(v);
+        out.println(v);
+    }
+    out.close();
+  }
+
+  static void pos(int x, int[] ar) {
+      if (x == 4) {
+          // System.out.println(Arrays.toString(ar));
+          for (int i = 0; i < N; i++) {
+              comb[index][i] = ar[i];
+          }
+          index++;
+          return;
+      }
+      int[] temp = new int[N];
+      for (int i = 0; i < N; i++) temp[i] = ar[i];
+      if (x == 0) {
+          pos(x+1, ar);
+          for (int i = 0; i < N; i++) ar[i] = temp[i];
+          for (int i = 2; i < N; i+=6) ar[i] = 1;
+          for (int i = 4; i < N; i+=6) ar[i] = 1;
+          pos(x+1, ar);
+      }
+      if (x == 1) {
+        pos(x+1, ar);
+        for (int i = 0; i < N; i++) ar[i] = temp[i];
+        for (int i = 1; i < N; i+=6) ar[i] = 1;
+        for (int i = 5; i < N; i+=6) ar[i] = 1;
+        pos(x+1, ar);
+    }
+    if (x == 2) {
+        pos(x+1, ar);
+        for (int i = 0; i < N; i++) ar[i] = temp[i];
+        for (int i = 3; i < N; i+=6) ar[i] = 1;
+        pos(x+1, ar);
+    }
+    if (x == 3) {
+      pos(x+1, ar);
+      for (int i = 0; i < N; i++) ar[i] = temp[i];
+      for (int i = 0; i < N; i+=6) ar[i] = 1;
+      pos(x+1, ar);
+    }
+  }
+
+}
