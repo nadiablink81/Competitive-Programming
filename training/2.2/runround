@@ -1,0 +1,37 @@
+import java.io.*;
+import java.util.*;
+
+class runround {
+
+  public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("runround.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("runround.out")));
+
+    int M = Integer.parseInt(f.readLine());
+    while (true) {
+        M++;
+        if (test(M)) break;
+    }
+    System.out.println(M);
+    out.println(M);
+    out.close();
+  }
+
+  static boolean test(int x) {
+      HashSet<Integer> index = new HashSet<>();
+      HashSet<Integer> set = new HashSet<>();
+      String s = "" + x;
+      int pos = 0;
+      while (index.size() != s.length()) {
+          int a = Integer.parseInt(s.charAt(pos) + "");
+          if (set.contains(a)) return false;
+          set.add(a);
+          int b = (pos + a) % s.length();
+          if (index.contains(b)) return false;
+          index.add(b);
+          pos = b;
+      }
+      return true;
+  }
+
+}
