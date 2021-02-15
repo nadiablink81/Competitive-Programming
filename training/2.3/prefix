@@ -1,0 +1,51 @@
+import java.io.*;
+import java.util.*;
+
+class prefix {
+
+    static String S;
+    static HashSet<String> set;
+    static boolean[] dp;
+
+  public static void main (String [] args) throws IOException {
+    Scanner sc = new Scanner(new File("prefix.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("prefix.out")));
+
+    set = new HashSet<>();
+    while (true) {
+        String s = sc.next();
+        if (s.equals(".")) break;
+        set.add(s);
+    }
+
+    StringBuilder sb = new StringBuilder();
+    while (sc.hasNext()) {
+        String s = sc.next();
+        sb.append(s);
+    }
+    S = sb.toString();
+
+    dp = new boolean[S.length()+1];      
+    int pos = 0;
+    dp[0] = true;
+    int cur = 0;
+    for (int i = 0; i <= S.length(); i++) {
+        if (!dp[cur]) {
+            cur++;
+            continue;
+        }
+        pos = cur;
+        int x = cur;
+        cur++;
+        for (String v : set) {
+            if (x + v.length() > S.length()) continue;
+            if (v.equals(S.substring(x, x+v.length()))) {
+                dp[x+v.length()] = true;
+            }
+        }
+    }
+    System.out.println(pos);
+    out.println(pos);
+    out.close();
+  }
+}
