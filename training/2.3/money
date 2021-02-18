@@ -1,0 +1,54 @@
+import java.io.*;
+import java.util.*;
+
+class money {
+
+    static int V, N;
+    static ArrayList<Integer> coins;
+    static long cnt;
+    static long[][] dp;
+
+    public static void main(String[] args) throws IOException {
+        Scanner sc = new Scanner(new FileReader("money.in"));
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("money.out")));
+
+        V = sc.nextInt();
+        N = sc.nextInt();
+
+        coins = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            int x = sc.nextInt();
+            coins.add(x);
+        }
+        Collections.sort(coins);
+        // System.out.println(coins);
+        dp = new long[V+1][N+1];
+
+        int a = coins.get(0);
+        for (int i = 0; i <= N; i++) {
+            if (i < a) continue;
+            if (i % a == 0) dp[1][i] = 1;
+        }
+
+        for (int i = 2; i <= V; i++) {
+            int x = coins.get(i-1);
+            for (int j = 0; j <= N; j++) {
+                if (j < x) dp[i][j] = dp[i-1][j];
+                else if (j == x) {
+                    dp[i][j] = dp[i-1][j] + 1;
+                }
+                else {
+                    dp[i][j] = dp[i-1][j] + dp[i][j-x];
+                }
+            }
+        }
+
+        // for (long[] v : dp) System.out.println(Arrays.toString(v));
+        long ans = dp[V][N];
+        System.out.println(ans);
+        out.println(ans);
+        
+        out.close();
+    }
+
+}
