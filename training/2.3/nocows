@@ -1,0 +1,42 @@
+import java.io.*;
+import java.util.*;
+
+class nocows {
+
+    static int N, K, mod;
+    static int[][] dp;
+
+    public static void main (String [] args) throws IOException {
+        BufferedReader f = new BufferedReader(new FileReader("nocows.in"));
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("nocows.out")));
+        
+        StringTokenizer st = new StringTokenizer(f.readLine());
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        mod = 9901;
+        dp = new int[N+1][K+1];
+
+        for (int i = 1; i <= N; i+=2) {
+            for (int j = 1; j <= K; j++) {
+                if (i == 1) {
+                    dp[i][j] = 1;
+                    continue;
+                }
+                for (int k = 1; k < i; k+=2) {
+                    dp[i][j] += dp[k][j-1] * dp[i-k-1][j-1];
+                    dp[i][j] %= mod;
+                }
+            }
+        }
+
+        // for (int[] v : dp) System.out.println(Arrays.toString(v));
+        int ans = dp[N][K] - dp[N][K-1];
+        ans += mod;
+        ans %= mod;
+        System.out.println(ans);
+        out.println(ans);
+
+        out.close();
+  }
+
+}
