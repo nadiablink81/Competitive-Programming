@@ -1,3 +1,8 @@
+/*
+ID: aidan811
+LANG: JAVA
+TASK: ttwo
+*/
 import java.io.*;
 import java.util.*;
 
@@ -36,8 +41,15 @@ class ttwo {
     String fdir = "N";
     String cdir = "N";
     int cnt = 0;
+    HashSet<String> set = new HashSet<>();
     while (true) {
         cnt++;
+        String s = fx + " " + fy + " " + fdir + " " + cx + " " + cy + " " + cdir;
+        if (set.contains(s)) {
+            cnt = 0;
+            break;
+        }
+        set.add(s);
         // System.out.println(fx + " " + fy);
         // System.out.println(cx + " " + cy);
         // System.out.println();
@@ -95,10 +107,6 @@ class ttwo {
             }
         }
         if (fx == cx && fy == cy) break;
-        if (cnt > 1000) {
-            cnt = 0;
-            break;
-        }
     }
 
     System.out.println(cnt);
