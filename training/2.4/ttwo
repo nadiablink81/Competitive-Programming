@@ -1,0 +1,110 @@
+import java.io.*;
+import java.util.*;
+
+class ttwo {
+
+    static char[][] ar;
+
+  public static void main (String [] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("ttwo.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("ttwo.out")));
+
+    ar = new char[10][10];
+    int fx = -1;
+    int fy = -1;
+    int cx = -1;
+    int cy = -1;
+    for (int i = 0; i < 10; i++) {
+        String s = f.readLine();
+        for (int j = 0; j < 10; j++) {
+            ar[i][j] = s.charAt(j);
+            if (ar[i][j] == 'F') {
+                fx = i;
+                fy = j;
+            }
+            if (ar[i][j] == 'C') {
+                cx = i;
+                cy = j;
+            }
+        }
+    }
+
+    // System.out.println(fx + " " + fy);
+    // System.out.println(cx + " " + cy);
+    // System.out.println();
+
+    String fdir = "N";
+    String cdir = "N";
+    int cnt = 0;
+    while (true) {
+        cnt++;
+        // System.out.println(fx + " " + fy);
+        // System.out.println(cx + " " + cy);
+        // System.out.println();
+        if (fdir.equals("N")) {
+            if (fx == 0 || ar[fx-1][fy] == '*') {
+                fdir = "E";
+            } else {
+                fx--;
+            }
+        } else if (fdir.equals("E")) {
+            if (fy == 9 || ar[fx][fy+1] == '*') {
+                fdir = "S";
+            } else {
+                fy++;
+            }
+        } else if (fdir.equals("S")) {
+            if (fx == 9 || ar[fx+1][fy] == '*') {
+                fdir = "W";
+            } else {
+                fx++;
+            }
+        } else if (fdir.equals("W")) {
+            if (fy == 0 || ar[fx][fy-1] == '*') {
+                fdir = "N";
+            } else {
+                fy--;
+            }
+        }
+
+        //------------
+
+        if (cdir.equals("N")) {
+            if (cx == 0 || ar[cx-1][cy] == '*') {
+                cdir = "E";
+            } else {
+                cx--;
+            }
+        } else if (cdir.equals("E")) {
+            if (cy == 9 || ar[cx][cy+1] == '*') {
+                cdir = "S";
+            } else {
+                cy++;
+            }
+        } else if (cdir.equals("S")) {
+            if (cx == 9 || ar[cx+1][cy] == '*') {
+                cdir = "W";
+            } else {
+                cx++;
+            }
+        } else if (cdir.equals("W")) {
+            if (cy == 0 || ar[cx][cy-1] == '*') {
+                cdir = "N";
+            } else {
+                cy--;
+            }
+        }
+        if (fx == cx && fy == cy) break;
+        if (cnt > 1000) {
+            cnt = 0;
+            break;
+        }
+    }
+
+    System.out.println(cnt);
+    out.println(cnt);
+
+    out.close();
+  }
+
+}
