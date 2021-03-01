@@ -1,0 +1,128 @@
+import java.io.*;
+import java.util.*;
+
+class q1 {
+  public static void main(String[] args) throws IOException {
+    BufferedReader f = new BufferedReader(new FileReader("q1.in"));
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("q1.out")));
+
+    int N = Integer.parseInt(f.readLine());
+    int[] x = new int[N];
+    int[] y = new int[N];
+    for (int i = 0; i < N; i++) {
+        StringTokenizer st = new StringTokenizer(f.readLine());
+        x[i] = Integer.parseInt(st.nextToken());
+        y[i] = Integer.parseInt(st.nextToken());
+    }
+
+    System.out.println(Arrays.toString(x));
+    System.out.println(Arrays.toString(y));
+    System.out.println();
+
+
+    HashSet<String> set = new HashSet<>();
+    HashMap<String, Integer> map = new HashMap<>();
+    int num = 0;
+    for (int i = 0; i < N; i++) {
+        String s = x[i] + " " + y[i];
+        if (map.get(s) != null) num--;
+        set.add(s);
+        String l = (x[i]-1) + " " + y[i];
+        String r = (x[i]+1) + " " + y[i];
+        String t = (x[i]) + " " + (y[i]+1);
+        String d = (x[i]) + " " + (y[i]-1);
+        int cnt = 0;
+        if (set.contains(l)) {
+            cnt++;
+            if (map.get(l) == null) map.put(l, 1);
+            else map.put(l, map.get(l) + 1);
+
+            if (map.get(l) == 3) {
+                String up = (x[i]-1) + " " + (y[i]+1);
+                String down = (x[i]-1) + " " + (y[i]-1);
+                String left = (x[i]-2) + " " + (y[i]);
+                if (!set.contains(up)) {
+                    map.put(up, 2);
+                }
+                if (!set.contains(down)) {
+                    map.put(down, 2);
+                }
+                if (!set.contains(left)) {
+                    map.put(left, 2);
+                }
+                num++;
+            }
+        }
+        if (set.contains(r)) {
+            cnt++;
+            if (map.get(r) == null) map.put(r, 1);
+            else map.put(r, map.get(r) + 1);
+
+            if (map.get(r) == 3) {
+                String up = (x[i]+1) + " " + (y[i]+1);
+                String down = (x[i]+1) + " " + (y[i]-1);
+                String right = (x[i]+2) + " " + (y[i]);
+                if (!set.contains(up)) {
+                    map.put(up, 2);
+                }
+                if (!set.contains(down)) {
+                    map.put(down, 2);
+                }
+                if (!set.contains(right)) {
+                    map.put(right, 2);
+                }
+                num++;
+            }
+        }
+        if (set.contains(t)) {
+            cnt++;
+            if (map.get(t) == null) map.put(t, 1);
+            else map.put(t, map.get(t) + 1);
+
+            if (map.get(t) == 3) {
+                String up = (x[i]) + " " + (y[i]+2);
+                String left = (x[i]-1) + " " + (y[i]+1);
+                String right = (x[i]+1) + " " + (y[i]+1);
+                if (!set.contains(up)) {
+                    map.put(up, 2);
+                }
+                if (!set.contains(left)) {
+                    map.put(left, 2);
+                }
+                if (!set.contains(right)) {
+                    map.put(right, 2);
+                }
+                num++;
+            }
+        }
+        if (set.contains(d)) {
+            cnt++;
+            if (map.get(d) == null) map.put(d, 1);
+            else map.put(d, map.get(d) + 1);
+
+            if (map.get(d) == 3) {
+                String down = (x[i]) + " " + (y[i]-2);
+                String left = (x[i]-1) + " " + (y[i]-1);
+                String right = (x[i]+1) + " " + (y[i]-1);
+                if (!set.contains(down)) {
+                    map.put(down, 2);
+                }
+                if (!set.contains(left)) {
+                    map.put(left, 2);
+                }
+                if (!set.contains(right)) {
+                    map.put(right, 2);
+                }
+                num++;
+            }
+        }
+        map.put(s, cnt);
+        System.out.println(map);
+        out.println(num);
+    }
+
+
+    out.close();
+
+  }
+}
